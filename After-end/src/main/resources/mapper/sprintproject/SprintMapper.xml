@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.citms.modules.sprintproject.dao.SprintMapper">
+
+	<resultMap id="sprintRm" type="com.citms.modules.sprintproject.entity.SprintEntity">
+		<result property="pkid" jdbcType="BIGINT" column="pkid" />
+		<result property="id" jdbcType="BIGINT" column="id" />
+		<result property="state" jdbcType="INTEGER" column="state" />
+		<result property="name" jdbcType="VARCHAR" column="name" />
+		<result property="startDate" jdbcType="TIMESTAMP" column="start_date" />
+		<result property="endDate" jdbcType="TIMESTAMP" column="end_date" />
+		<result property="originBoardId" jdbcType="BIGINT" column="origin_board_id" />
+		<result property="goal" jdbcType="VARCHAR" column="goal" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+        	id,
+        	state,
+        	name,
+        	start_date,
+        	end_date,
+        	origin_board_id,
+        	goal
+	</sql>
+
+
+	<sql id="where">
+		<where>
+		1=1
+			<if test="id != null">
+				AND id = #{id}
+			</if>
+			<if test="state != null">
+				AND state = #{state}
+			</if>
+			<if test="name != null">
+				AND name = #{name}
+			</if>
+			<if test="startDate != null">
+				AND start_date = #{startDate}
+			</if>
+			<if test="endDate != null">
+				AND end_date = #{endDate}
+			</if>
+			<if test="originBoardId != null">
+				AND origin_board_id = #{originBoardId}
+			</if>
+			<if test="goal != null">
+				AND goal = #{goal}
+			</if>
+		</where>
+	</sql>
+
+	<select id="querySprintById" parameterType="java.lang.Long" resultMap="sprintRm">
+		select <include refid="Base_Column_List"/> from tbl_sprint where id = #{value} for update
+	</select>
+
+    <select id="getSprintListByProjectId" resultMap="sprintRm" parameterType="java.lang.Long">
+		select t1.* from tbl_sprint t1
+		inner join tbl_sprint_project t2
+		on t1.id=t2.sprint_id and t2.is_deleted=0
+		where t2.project_id = #{value}
+		order by t1.start_date desc, t1.id desc
+	</select>
+
+	<select id="getUnrelatedSprintList" resultMap="sprintRm">
+		select * from tbl_sprint t1
+		WHERE Not EXISTS (select * from tbl_sprint_project t2 where t1.id=t2.sprint_id and t2.is_deleted=0)
+		order by t1.id
+	</select>
+
+	<select id="getSprintListByProjectIds" resultType="com.citms.modules.sprintproject.vo.SprintInfoVO" parameterType="java.util.List">
+		select t1.id as id,t1.name as name, t1.state as state ,t2.project_id as projectId, t3.name as projectName from tbl_sprint t1
+		inner join tbl_sprint_project t2
+		on t1.id=t2.sprint_id and t2.is_deleted=0
+		left join tbl_project t3 on t2.project_id=t3.id
+		where t2.project_id in
+		<foreach collection="projectIdList" open="(" close=")" separator="," item="id">
+			#{id}
+		</foreach>
+		order by t2.project_id asc, t1.start_date desc, t1.id desc
+	</select>
+
+
+</mapper>

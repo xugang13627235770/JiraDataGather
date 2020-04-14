@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.citms.modules.jira.dao.DictionaryMapper">
+
+	<resultMap id="dictionaryRm" type="com.citms.modules.jira.entity.DictionaryEntity">
+		<result property="id" jdbcType="BIGINT" column="id" />
+		<result property="parentId" jdbcType="BIGINT" column="parent_id" />
+		<result property="code" jdbcType="VARCHAR" column="code" />
+		<result property="dictKey" jdbcType="VARCHAR" column="dict_key" />
+		<result property="dictValue" jdbcType="VARCHAR" column="dict_value" />
+		<result property="remark" jdbcType="VARCHAR" column="remark" />
+		<result property="isDeleted" jdbcType="INTEGER" column="is_deleted" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+        	id,
+        	parent_id,
+        	code,
+        	dict_key,
+        	dict_value,
+        	remark,
+        	is_deleted
+	</sql>
+
+
+	<sql id="where">
+		<where>
+		1=1
+			<if test="id != null">
+				AND id = #{id}
+			</if>
+			<if test="parentId != null">
+				AND parent_id = #{parentId}
+			</if>
+			<if test="code != null">
+				AND code = #{code}
+			</if>
+			<if test="dictKey != null">
+				AND dict_key = #{dictKey}
+			</if>
+			<if test="dictValue != null">
+				AND dict_value = #{dictValue}
+			</if>
+			<if test="remark != null">
+				AND remark = #{remark}
+			</if>
+			<if test="isDeleted != null">
+				AND is_deleted = #{isDeleted}
+			</if>
+		</where>
+	</sql>
+
+
+</mapper>

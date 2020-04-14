@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.citms.modules.tester.dao.ConfigTesterMapper">
+
+	<resultMap id="configTesterRm" type="com.citms.modules.tester.entity.ConfigTesterEntity">
+		<result property="totalBaseScore" jdbcType="DECIMAL" column="total_base_score" />
+		<result property="issueValidBase" jdbcType="DECIMAL" column="issue_valid_base" />
+		<result property="violateMaxScore" jdbcType="DECIMAL" column="violate_max_score" />
+		<result property="onlineIssueRatio" jdbcType="DECIMAL" column="online_issue_ratio" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+        	total_base_score,
+        	issue_valid_base,
+        	violate_max_score,
+        	online_issue_ratio
+	</sql>
+
+
+	<sql id="where">
+		<where>
+		1=1 and VALID = 1
+			<if test="totalBaseScore != null">
+				AND total_base_score = #{totalBaseScore}
+			</if>
+			<if test="issueValidBase != null">
+				AND issue_valid_base = #{issueValidBase}
+			</if>
+			<if test="violateMaxScore != null">
+				AND violate_max_score = #{violateMaxScore}
+			</if>
+			<if test="onlineIssueRatio != null">
+				AND online_issue_ratio = #{onlineIssueRatio}
+			</if>
+		</where>
+	</sql>
+
+	<sql id="testerRecordList">
+		from tbl_user t1
+		<!--缺陷有效率=迭代内解决结果为“已解决”和“未解决”状态的缺陷数量 / 迭代总缺陷数-->
+		LEFT JOIN (select t1.creator_id, case when t2.num =0 then 0 else (t1.num/t2.num) end as issueValidRate, t1.num as issueValidNum
+		from (select t1.creator_id, count(t1.creator_id) as num
+		from tbl_issue t1
+		inner join tbl_issue_sprint t2 on t1.id=t2.issue_id
+		where t1.issuetype=2 and t1.resolution in (3,4)
+		<if test="ids !=null and ids.size>0">
+			and t2.sprint_id in
+			<foreach collection="ids" open="(" close=")" separator="," item="id">
+				#{id}
+			</foreach>
+		</if>
+		group by t1.creator_id) t1
+		inner join (select creator_id, count(creator_id) as num
+		from tbl_issue t1
+		inner join tbl_issue_sprint t2 on t1.id=t2.issue_id
+		where t1.issuetype=2
+		<if test="ids !=null and ids.size>0">
+			and t2.sprint_id in
+			<foreach collection="ids" open="(" close=")" separator="," item="id">
+				#{id}
+			</foreach>
+		</if>
+		group by t1.creator_id) t2
+		on t1.creator_id=t2.creator_id) t2
+		on t1.id=t2.creator_id
+		<!--违规操作次数=迭代内新增未指定经办人或经办人为测试人员的缺陷数量-->
+		LEFT JOIN (select t1.creator_id, count(t1.creator_id) as violateOperateTimes from tbl_issue t1
+		inner join tbl_issue_sprint t2 on t1.id=t2.issue_id
+		left join tbl_user t4 on t1.assignee_id=t4.id
+		where t1.issuetype=2 and (t1.assignee_id is null or t4.user_type=3) and t2.is_sprint_add=0
+		<if test="ids !=null and ids.size>0">
+			and t2.sprint_id in
+			<foreach collection="ids" open="(" close=")" separator="," item="id">
+				#{id}
+			</foreach>
+		</if>
+		group by t1.creator_id) t3
+		on t1.id=t3.creator_id
+		<!--有效缺陷新增=迭代内新增的、解决结果为“已解决”和“未解决”状态的缺陷数量-->
+		LEFT JOIN (select t1.creator_id, count(t1.creator_id) as issueAddNum from tbl_issue t1
+		inner join tbl_issue_sprint t2 on t1.id=t2.issue_id
+		where t1.issuetype=2 and t1.resolution in (3,4) and t2.is_sprint_add=0
+		<if test="ids !=null and ids.size>0">
+			and t2.sprint_id in
+			<foreach collection="ids" open="(" close=")" separator="," item="id">
+				#{id}
+			</foreach>
+		</if>
+		group by t1.creator_id) t4
+		on t1.id=t4.creator_id
+		<!--缺陷平均耗时=迭代内新增且关闭的缺陷总耗时 / 迭代内新增且关闭的缺陷数量-->
+		LEFT JOIN(select t1.creator_id, sum(datediff(t1.close_date,t1.created))/count(t1.creator_id) as taskTimes from tbl_issue t1
+		inner join tbl_issue_sprint t2 on t1.id=t2.issue_id
+		where t1.`status`=5 and t1.issuetype=2 and t2.is_sprint_add=0
+		<if test="ids !=null and ids.size>0">
+			and t2.sprint_id in
+			<foreach collection="ids" open="(" close=")" separator="," item="id">
+				#{id}
+			</foreach>
+		</if>
+		GROUP BY t1.creator_id) t5
+		on t1.id=t5.creator_id
+		<!--历史缺陷关闭=迭代内历史遗留的缺陷关闭数量-->
+		LEFT JOIN(select t1.creator_id, count(t1.creator_id) as historyCloseNum from tbl_issue t1
+		inner join tbl_issue_sprint t2 on t1.id=t2.issue_id
+		where t1.`status`=5 and t1.issuetype=2 and t2.is_sprint_add=1
+		<if test="ids !=null and ids.size>0">
+			and t2.sprint_id in
+			<foreach collection="ids" open="(" close=")" separator="," item="id">
+				#{id}
+			</foreach>
+		</if>
+		GROUP BY t1.creator_id) t6
+		on t1.id=t6.creator_id
+		<!--线上反馈缺陷=迭代内新增，缺陷来源为“线上”的缺陷数量-->
+		LEFT JOIN(select t1.creator_id, count(t1.creator_id) as onlineIssueNum from tbl_issue t1
+		inner join tbl_issue_sprint t2 on t1.id=t2.issue_id
+		where t1.customfield10203=4 and t1.issuetype=2 and t2.is_sprint_add=0
+		<if test="ids !=null and ids.size>0">
+			and t2.sprint_id in
+			<foreach collection="ids" open="(" close=")" separator="," item="id">
+				#{id}
+			</foreach>
+		</if>
+		group by t1.creator_id) t7
+		on t1.id=t7.creator_id
+		where t1.user_type =3
+        AND EXISTS (
+        SELECT t13.creator_id
+        FROM(select t11.* from tbl_issue t11
+        INNER JOIN tbl_issue_sprint t12 ON t11.id = t12.issue_id AND t12.sprint_id IN
+        <foreach collection="ids" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>) t13
+        WHERE t1.id = t13.creator_id
+        )
+	</sql>
+
+	<select id="getTesterRecordList"
+			resultType="com.citms.modules.tester.vo.TesterRecordVO" parameterType="java.util.List">
+		select t1.id as userId, t1.display_name as userName,round(IFNULL(t2.issueValidRate,0),2) as issueValidRate, IFNULL(t2.issueValidNum,0) as issueValidNum
+		, IFNULL(t3.violateOperateTimes,0) as violateOperateTimes, IFNULL(t4.issueAddNum,0) as issueAddNum
+		, round(IFNULL(t5.taskTimes,0),2) as taskTimes, IFNULL(t6.historyCloseNum,0) as historyCloseNum, IFNULL(t7.onlineIssueNum,0) as onlineIssueNum
+		<include refid="testerRecordList"/>
+	</select>
+
+    <select id="getTesterRecordPage"
+            resultType="com.citms.modules.tester.vo.TesterRecordVO">
+		select t1.id as userId, t1.display_name as userName,round(IFNULL(t2.issueValidRate,0),2) as issueValidRate, IFNULL(t2.issueValidNum,0) as issueValidNum
+		, IFNULL(t3.violateOperateTimes,0) as violateOperateTimes, IFNULL(t4.issueAddNum,0) as issueAddNum
+		, round(IFNULL(t5.taskTimes,0),2) as taskTimes, IFNULL(t6.historyCloseNum,0) as historyCloseNum, IFNULL(t7.onlineIssueNum,0) as onlineIssueNum
+		<include refid="testerRecordList"/>
+	</select>
+
+	<select id="getTesterRecordCount" resultType="java.lang.Integer">
+		select count(1)
+		<include refid="testerRecordList"/>
+	</select>
+
+
+</mapper>

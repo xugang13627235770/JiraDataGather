@@ -1,0 +1,77 @@
+
+#app{
+    #page /deep/{
+        margin:10px;
+        height: calc(100%);
+        
+        // 首页
+        .toolsBar{
+            height: 22px;
+            width:100%;
+            position: relative;
+            i{
+                font-size:16px;
+                cursor: pointer;
+            }
+            .ico{
+                margin-right:10px;
+                &.c-select-group{
+                    span{display: none;}
+                    .c-dropdown-toggle{
+                        background: url('../../../static/images/iconshezhi.png') no-repeat 0 0;
+                        background-size: auto 100%;
+                        border:0px none;
+                        min-height:20px;
+                        &:hover{
+                            border:0px none
+                        }
+                        .times-circle{
+                            display: none;
+                        }
+                        .c-fa-caret-up{
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
+        // 统计图列表
+        .list{
+            width:calc(100% - 20px);
+            margin:0 10px;
+            height: calc(100%);
+            overflow-y: auto;
+            .project{
+                margin-top:10px;
+                height:340px;
+                overflow: hidden;
+            }
+            .title{
+                font-size:14px;
+                height: 32px;
+                line-height: 32px;
+                margin:0;
+                border-bottom: 1px solid #5bceff;
+                span{
+                    margin-right: 15px;
+                }
+            }
+            .chartBox{
+                display: flex;
+                height: 250px;
+                justify-content:space-between;
+                .chart{
+                    width:calc(33.3% - 10px);
+                    height: 300px;
+                }
+            }
+        }
+        .c-data-table .c-table-bordered{
+            .title{
+                height: inherit;
+                line-height: inherit;
+                border-bottom: 0px none;
+            }
+        }
+    }
+}

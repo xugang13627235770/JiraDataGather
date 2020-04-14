@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.citms.modules.jira.dao.IssueMapper">
+
+	<resultMap id="issueRm" type="com.citms.modules.jira.entity.IssueEntity">
+		<result property="pkid" jdbcType="BIGINT" column="pkid" />
+		<result property="id" jdbcType="BIGINT" column="id" />
+		<result property="keyValue" jdbcType="VARCHAR" column="key_value" />
+		<result property="issuetype" jdbcType="INTEGER" column="issuetype" />
+		<result property="components" jdbcType="VARCHAR" column="components" />
+		<result property="timespent" jdbcType="VARCHAR" column="timespent" />
+		<result property="timeoriginalestimate" jdbcType="VARCHAR" column="timeoriginalestimate" />
+		<result property="description" jdbcType="VARCHAR" column="description" />
+		<result property="projectId" jdbcType="BIGINT" column="project_id" />
+		<result property="aggregatetimespent" jdbcType="VARCHAR" column="aggregatetimespent" />
+		<result property="resolution" jdbcType="INTEGER" column="resolution" />
+		<result property="timetracking" jdbcType="VARCHAR" column="timetracking" />
+		<result property="customfield10104" jdbcType="VARCHAR" column="customfield10104" />
+		<result property="customfield10105" jdbcType="VARCHAR" column="customfield10105" />
+		<result property="customfield10204" jdbcType="VARCHAR" column="customfield10204" />
+		<result property="customfield10106" jdbcType="VARCHAR" column="customfield10106" />
+		<result property="attachment" jdbcType="BIGINT" column="attachment" />
+		<result property="aggregatetimeestimate" jdbcType="VARCHAR" column="aggregatetimeestimate" />
+		<result property="resolutiondate" jdbcType="TIMESTAMP" column="resolutiondate" />
+		<result property="workratio" jdbcType="INTEGER" column="workratio" />
+		<result property="summary" jdbcType="VARCHAR" column="summary" />
+		<result property="lastViewed" jdbcType="TIMESTAMP" column="last_viewed" />
+		<result property="watches" jdbcType="VARCHAR" column="watches" />
+		<result property="creatorId" jdbcType="BIGINT" column="creator_id" />
+		<result property="created" jdbcType="TIMESTAMP" column="created" />
+		<result property="reporterId" jdbcType="BIGINT" column="reporter_id" />
+		<result property="customfield10000" jdbcType="VARCHAR" column="customfield10000" />
+		<result property="aggregateprogress" jdbcType="INTEGER" column="aggregateprogress" />
+		<result property="priority" jdbcType="INTEGER" column="priority" />
+		<result property="customfield10100" jdbcType="VARCHAR" column="customfield10100" />
+		<result property="labels" jdbcType="VARCHAR" column="labels" />
+		<result property="timeestimate" jdbcType="VARCHAR" column="timeestimate" />
+		<result property="aggregatetimeoriginalestimate" jdbcType="VARCHAR" column="aggregatetimeoriginalestimate" />
+		<result property="duedate" jdbcType="TIMESTAMP" column="duedate" />
+		<result property="progress" jdbcType="VARCHAR" column="progress" />
+		<result property="comment" jdbcType="VARCHAR" column="comment" />
+		<result property="issuelinks" jdbcType="VARCHAR" column="issuelinks" />
+		<result property="votes" jdbcType="INTEGER" column="votes" />
+		<result property="worklog" jdbcType="VARCHAR" column="worklog" />
+		<result property="assigneeId" jdbcType="VARCHAR" column="assignee_id" />
+		<result property="updated" jdbcType="TIMESTAMP" column="updated" />
+		<result property="status" jdbcType="INTEGER" column="status" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+        	id,
+        	key_value,
+        	issuetype,
+        	components,
+        	timespent,
+        	timeoriginalestimate,
+        	description,
+        	project_id,
+        	aggregatetimespent,
+        	resolution,
+        	timetracking,
+        	customfield10104,
+        	customfield10105,
+        	customfield10204,
+        	customfield10106,
+        	attachment,
+        	aggregatetimeestimate,
+        	resolutiondate,
+        	workratio,
+        	summary,
+        	last_viewed,
+        	watches,
+        	creator_id,
+        	created,
+        	reporter_id,
+        	customfield10000,
+        	aggregateprogress,
+        	priority,
+        	customfield10100,
+        	labels,
+        	timeestimate,
+        	aggregatetimeoriginalestimate,
+        	duedate,
+        	progress,
+        	comment,
+        	issuelinks,
+        	votes,
+        	worklog,
+        	assignee_id,
+        	updated,
+        	status
+	</sql>
+
+	<select id="queryIssueEntityById" parameterType="java.lang.Long" resultMap="issueRm" >
+		select <include refid="Base_Column_List"/> from tbl_issue
+		where id=#{value}
+		for update
+	</select>
+
+	<select id="getIssueTypeList" resultType="com.citms.modules.home.vo.IssueTypeVO" parameterType="java.lang.Long">
+		select t1.dict_key issueType,t1.dict_value issueTypeStr, t2.closeIssueNum,t3.noCloseIssueNum from(select * from tbl_dictionary where code='issue_type') t1
+		left join (select issuetype, count(issuetype) closeIssueNum from tbl_issue
+			where `status`=5 and project_id=#{value} group by issuetype) t2 on t1.dict_key=t2.issuetype
+		left join (select issuetype, count(issuetype) noCloseIssueNum from tbl_issue
+			where `status`!=5 and project_id=#{value} group by issuetype) t3 on t1.dict_key=t3.issuetype
+	</select>
+
+
+	<select id="getIssueScaleList"
+			resultType="com.citms.modules.home.vo.IssueScaleVO" parameterType="java.lang.Long">
+		select t1.display_name displayName,t2.issueCount/(select count(1) from tbl_issue where assignee_id is not null and project_id=#{value}) issueRate
+		from tbl_user t1 LEFT JOIN
+		(select assignee_id,count(assignee_id) issueCount from tbl_issue WHERE assignee_id is not null and project_id=#{value} group by assignee_id) t2
+		on t1.id=t2.assignee_id
+		where t2.issueCount is not null;
+	</select>
+
+	<!--<select id="getIssueDateList" resultType="com.citms.modules.home.vo.IssueDateVO" parameterType="java.lang.Long">-->
+		<!--select t2.created issueDate,t1.dict_key issueStatus, t1.dict_value issueStatusStr,t2.issueNum-->
+		<!--from (select dict_key,dict_value from tbl_dictionary where code='issue_status') t1-->
+		<!--left JOIN(select `status`,date_format(created, '%Y-%m-%d' ) created , count(1) issueNum-->
+		<!--from tbl_issue t1 where t1.project_id=#{value} group by `status`, date_format(created, '%Y-%m-%d' )) t2-->
+		<!--on t1.dict_key=t2.`status`-->
+		<!--where datediff(now(), t2.created ) &lt;= 30-->
+		<!--order by t2.created asc, t1.dict_key-->
+	<!--</select>-->
+
+	<select id="getIssueDateListByDate"
+			resultType="com.citms.modules.home.vo.IssueDateVO">
+		select t1.dict_key issueStatus, t1.dict_value issueStatusStr,t2.issueNum
+		from (select dict_key,dict_value from tbl_dictionary where code='issue_status') t1
+		LEFT JOIN	(select `status` , count(1) issueNum
+		from tbl_issue t1 where t1.project_id=#{projectId} and t1.created&lt;=#{date} group by `status`) t2
+		on t1.dict_key=t2.`status`
+		order by  t1.dict_key
+	</select>
+
+	<select id="getTotalStoryPoint" resultType="java.math.BigDecimal" parameterType="java.lang.Long">
+		select round(IFNULL(sum(customfield10106),0),2) totalStoryPoint from tbl_issue
+		where customfield10106 is not null and project_id=#{value}
+	</select>
+
+	<select id="getTotalDeveloper" resultType="java.lang.Long" parameterType="java.lang.Long">
+		select count(DISTINCT assignee_id) from tbl_issue t1 where project_id=#{value}
+        and EXISTS ( select * from tbl_user t2 where t1.assignee_id=t2.id and t2.user_type in(4,5,6))
+	</select>
+
+	<select id="getTotalTester" resultType="java.lang.Long" parameterType="java.lang.Long">
+		select count(DISTINCT creator_id) from tbl_issue t1 where project_id=#{value}
+        and EXISTS ( select * from tbl_user t2 where t1.creator_id=t2.id and t2.user_type =3)
+	</select>
+
+    <select id="getTotalDesigner" resultType="java.lang.Long">
+        select count(DISTINCT assignee_id) from tbl_issue t1 where project_id=#{value}
+        and EXISTS ( select * from tbl_user t2 where t1.assignee_id=t2.id and t2.user_type =2)
+    </select>
+
+	<select id="getStoryPointRate"
+			resultType="com.citms.modules.project.vo.StoryPointScaleVO" parameterType="java.lang.Long">
+	  select t.display_name displayName,round(IFNULL(t.storyPoint/t.totalStoryPoint,0),4) storyPointRate, t.totalStoryPoint
+	  from(
+		select t1.display_name, t2.storyPoint,
+			(select sum(t.customfield10106) from tbl_issue t
+			where t.issuetype=1 and t.assignee_id is not null
+			and EXISTS(select * from tbl_issue_sprint t3 where t3.issue_id=t.id AND t3.sprint_id=#{value} )) as totalStoryPoint
+		from tbl_user t1
+		LEFT JOIN
+			(select t.assignee_id,sum(t.customfield10106) storyPoint from tbl_issue t
+			WHERE t.issuetype=1 and t.assignee_id is not null
+			and EXISTS(select * from tbl_issue_sprint t3 where t3.issue_id=t.id AND t3.sprint_id=#{value} )
+			group by t.assignee_id) t2
+		on t1.id=t2.assignee_id
+		where t2.storyPoint is not null
+	  ) t
+	</select>
+
+	<select id="getDefectRate" resultType="com.citms.modules.project.vo.DefectScaleVO" parameterType="java.lang.Long">
+	  select t.display_name displayName, round(IFNULL(t.issueCount/t.totalDefect,0),4) as defectRate ,t.totalDefect
+	  from (
+		select t1.display_name,t2.issueCount,
+			(select count(1) from tbl_issue t
+			where t.issuetype=2 and t.assignee_id is not null
+			and EXISTS(select * from tbl_issue_sprint t3 where t3.issue_id=t.id AND t3.sprint_id=#{value} )) as totalDefect
+		from tbl_user t1
+		LEFT JOIN
+			(select t.assignee_id,count(t.assignee_id) issueCount from tbl_issue t
+			WHERE  t.issuetype=2 and t.assignee_id is not null
+			and EXISTS(select * from tbl_issue_sprint t3 where t3.issue_id=t.id AND t3.sprint_id=#{value} )
+			group by t.assignee_id) t2
+		on t1.id=t2.assignee_id
+		where t2.issueCount is not null
+	  ) t
+	</select>
+
+	<select id="getAddIssueTypeList"
+			resultType="com.citms.modules.home.vo.IssueTypeVO" parameterType="java.lang.Long">
+		select t1.dict_key issueType,t1.dict_value issueTypeStr, t2.closeIssueNum,t3.noCloseIssueNum
+		from (select * from tbl_dictionary where code='issue_type') t1
+		left join (select issuetype, count(issuetype) closeIssueNum from tbl_issue t
+			where `status`=5
+			and EXISTS(select * from tbl_issue_sprint t3 where t3.issue_id=t.id AND t3.is_sprint_add=0 AND t3.sprint_id=#{value}  )
+			group by issuetype) t2 on t1.dict_key=t2.issuetype
+		left join (select issuetype, count(issuetype) noCloseIssueNum from tbl_issue t
+			where `status`!=5
+			and EXISTS(select * from tbl_issue_sprint t3 where t3.issue_id=t.id AND t3.is_sprint_add=0 AND t3.sprint_id=#{value} )
+			group by issuetype) t3 on t1.dict_key=t3.issuetype
+	</select>
+
+	<select id="getTotalStoryByUserIds"
+			resultType="com.citms.modules.user.vo.UserVO" parameterType="java.util.List">
+		select t1.id, count(t1.id) as totalStory  from tbl_user t1
+		left join tbl_issue t2 on t1.id=t2.assignee_id and t2.issuetype=1 and t2.assignee_id is not NULL
+		where t1.id in
+		<foreach collection="ids" open="(" close=")" separator="," item="id">
+			#{id}
+		</foreach>
+		group by t1.id
+
+	</select>
+
+	<select id="getTotalDefectByUserIds"
+			resultType="com.citms.modules.user.vo.UserVO" parameterType="java.util.List">
+		select t1.id, count(t1.id) as totalDefect  from tbl_user t1
+		left join tbl_issue t2 on t1.id=t2.assignee_id and t2.issuetype=2 and t2.assignee_id is not NULL
+		where t1.id in
+		<foreach collection="ids" open="(" close=")" separator="," item="id">
+			#{id}
+		</foreach>
+		group by t1.id
+	</select>
+
+</mapper>

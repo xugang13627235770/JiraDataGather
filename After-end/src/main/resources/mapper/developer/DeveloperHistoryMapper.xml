@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.citms.modules.developer.dao.DeveloperHistoryMapper">
+
+	<resultMap id="developerHistoryRm" type="com.citms.modules.developer.entity.DeveloperHistoryEntity">
+		<result property="projectId" jdbcType="BIGINT" column="project_id" />
+		<result property="sprintId" jdbcType="BIGINT" column="sprint_id" />
+		<result property="userId" jdbcType="BIGINT" column="user_id" />
+		<result property="developerName" jdbcType="VARCHAR" column="developer_name" />
+		<result property="closeStoryNum" jdbcType="DECIMAL" column="close_story_num" />
+		<result property="testDelayDays" jdbcType="INTEGER" column="test_delay_days" />
+		<result property="testBackTimes" jdbcType="INTEGER" column="test_back_times" />
+		<result property="issueReturnTimes" jdbcType="INTEGER" column="issue_return_times" />
+		<result property="redIssue" jdbcType="INTEGER" column="red_issue" />
+		<result property="noredIssue" jdbcType="INTEGER" column="nored_issue" />
+		<result property="validIssueNum" jdbcType="INTEGER" column="valid_issue_num" />
+		<result property="issueCloseRate" jdbcType="DECIMAL" column="issue_close_rate" />
+		<result property="onlineIssue" jdbcType="INTEGER" column="online_issue" />
+		<result property="totalScore" jdbcType="DECIMAL" column="total_score" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+        	project_id,
+        	sprint_id,
+        	user_id,
+        	developer_name,
+        	close_story_num,
+        	test_delay_days,
+        	test_back_times,
+        	issue_return_times,
+        	red_issue,
+        	nored_issue,
+        	valid_issue_num,
+        	issue_close_rate,
+        	online_issue,
+        	total_score
+	</sql>
+	<insert id="batchSaveDeveloperHistory">
+		INSERT INTO tbl_developer_history
+		(project_id,
+		sprint_id,
+		user_id,
+		developer_name,
+		close_story_num,
+		test_delay_days,
+		test_back_times,
+		issue_return_times,
+		red_issue,
+		nored_issue,
+		valid_issue_num,
+		issue_close_rate,
+		online_issue,
+		total_score,
+		next_sprint_id
+		)
+		VALUES
+		<foreach collection="developerHistoryList" item="item" separator=",">
+			(#{item.projectId}
+			,#{item.sprintId}
+			,#{item.userId}
+			,#{item.developerName}
+			,#{item.closeStoryNum}
+			,#{item.testDelayDays}
+			,#{item.testBackTimes}
+			,#{item.issueReturnTimes}
+			,#{item.redIssue}
+			,#{item.noredIssue}
+			,#{item.validIssueNum}
+			,#{item.issueCloseRate}
+			,#{item.onlineIssue}
+			,#{item.totalScore}
+			,#{item.nextSprintId})
+		</foreach>
+	</insert>
+
+
+</mapper>

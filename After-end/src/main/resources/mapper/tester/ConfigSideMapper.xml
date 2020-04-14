@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.citms.modules.tester.dao.ConfigSideMapper">
+
+	<resultMap id="configSideRm" type="com.citms.modules.tester.entity.ConfigSideEntity">
+		<result property="code" jdbcType="VARCHAR" column="code" />
+		<result property="leftSide" jdbcType="DECIMAL" column="left_side" />
+		<result property="rightSide" jdbcType="DECIMAL" column="right_side" />
+		<result property="score" jdbcType="DECIMAL" column="score" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+        	code,
+        	left_side,
+        	right_side,
+        	score
+	</sql>
+
+
+	<sql id="where">
+		<where>
+		1=1 and VALID = 1
+			<if test="code != null">
+				AND code = #{code}
+			</if>
+			<if test="leftSide != null">
+				AND left_side = #{leftSide}
+			</if>
+			<if test="rightSide != null">
+				AND right_side = #{rightSide}
+			</if>
+			<if test="score != null">
+				AND score = #{score}
+			</if>
+		</where>
+	</sql>
+
+    <select id="getConfigSideByCode" resultMap="configSideRm">
+		select <include refid="Base_Column_List"/> from tbl_config_side
+			where code = #{value}
+			order by pkid asc
+	</select>
+
+	<!-- 查询区间配置 -->
+	<select id="selectSideConfigByCodes" parameterType="java.util.List" resultType="com.citms.modules.tester.entity.ConfigSideEntity">
+		SELECT
+			*
+		FROM
+			TBL_CONFIG_SIDE
+		WHERE
+			IS_DELETED = 0
+			AND CODE IN (
+				<foreach collection="list" item="code" separator=",">
+					#{code}
+				</foreach>
+			)
+		ORDER BY PKID
+	</select>
+
+	<!-- 根据code列表删除区间配置 -->
+	<select id="deleteByCodes" parameterType="java.util.List">
+		DELETE FROM TBL_CONFIG_SIDE
+		WHERE
+			CODE IN (
+				<foreach collection="list" item="code" separator=",">
+					#{code}
+				</foreach>
+			)
+	</select>
+
+</mapper>

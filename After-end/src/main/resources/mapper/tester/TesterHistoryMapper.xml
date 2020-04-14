@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.citms.modules.tester.dao.TesterHistoryMapper">
+
+	<resultMap id="testerHistoryRm" type="com.citms.modules.tester.entity.TesterHistoryEntity">
+		<result property="projectId" jdbcType="BIGINT" column="project_id" />
+		<result property="sprintId" jdbcType="BIGINT" column="sprint_id" />
+		<result property="userId" jdbcType="BIGINT" column="user_id" />
+		<result property="userName" jdbcType="VARCHAR" column="user_name" />
+		<result property="issueValidNum" jdbcType="DECIMAL" column="issue_valid_num" />
+		<result property="issueValidRate" jdbcType="DECIMAL" column="issue_valid_rate" />
+		<result property="violateOperateTimes" jdbcType="DECIMAL" column="violate_operate_times" />
+		<result property="issueAddNum" jdbcType="DECIMAL" column="issue_add_num" />
+		<result property="taskTimes" jdbcType="DECIMAL" column="task_times" />
+		<result property="historyCloseNum" jdbcType="DECIMAL" column="history_close_num" />
+		<result property="onlineIssueNum" jdbcType="DECIMAL" column="online_issue_num" />
+		<result property="totalScore" jdbcType="DECIMAL" column="total_score" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+        	project_id,
+        	sprint_id,
+        	user_id,
+        	user_name,
+        	issue_valid_num,
+        	issue_valid_rate,
+        	violate_operate_times,
+        	issue_add_num,
+        	task_times,
+        	history_close_num,
+        	online_issue_num,
+        	total_score
+	</sql>
+
+    <insert id="batchSaveTesterHistory">
+		INSERT INTO tbl_tester_history
+		(project_id,
+		sprint_id,
+		user_id,
+		user_name,
+		issue_valid_num,
+		issue_valid_rate,
+		violate_operate_times,
+		issue_add_num,
+		task_times,
+		history_close_num,
+		online_issue_num,
+		total_score,
+		next_sprint_id)
+		VALUES
+		<foreach collection="testerHistoryList" item="item" separator=",">
+			(#{item.projectId}
+			,#{item.sprintId}
+			,#{item.userId}
+			,#{item.userName}
+			,#{item.issueValidNum}
+			,#{item.issueValidRate}
+			,#{item.violateOperateTimes}
+			,#{item.issueAddNum}
+			,#{item.taskTimes}
+			,#{item.historyCloseNum}
+			,#{item.onlineIssueNum}
+			,#{item.totalScore}
+			,#{item.nextSprintId})
+		</foreach>
+	</insert>
+
+
+</mapper>

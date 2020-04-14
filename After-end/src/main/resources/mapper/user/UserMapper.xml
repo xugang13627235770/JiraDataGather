@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.citms.modules.user.dao.UserMapper">
+	
+	<resultMap id="rm" type="com.citms.modules.user.entity.UserEntity">
+		<result property="id" jdbcType="BIGINT" column="id" />
+		<result property="name" jdbcType="VARCHAR" column="name" />
+		<result property="displayName" jdbcType="VARCHAR" column="display_name" />
+		<result property="keyValue" jdbcType="VARCHAR" column="key_value" />
+		<result property="emailAddress" jdbcType="VARCHAR" column="email_address" />
+		<result property="active" jdbcType="INTEGER" column="active" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+        	id,
+        	name,
+        	display_name,
+        	key_value,
+        	email_address,
+        	active
+	</sql>
+	
+		
+	<sql id="where">
+		<where>
+		1=1
+			<if test="id != null">
+				AND id = #{id}
+			</if>
+			<if test="name != null">
+				AND name = #{name}
+			</if>
+			<if test="displayName != null">
+				AND display_name = #{displayName}
+			</if>
+			<if test="keyValue != null">
+				AND key_value = #{keyValue}
+			</if>
+			<if test="emailAddress != null">
+				AND email_address = #{emailAddress}
+			</if>
+			<if test="active != null">
+				AND active = #{active}
+			</if>
+		</where>
+	</sql>
+	<!-- 根据name，查询value -->
+	<select id="queryUserByName" parameterType="string" resultMap="rm">
+		select <include refid="Base_Column_List"/> from tbl_user where name = #{value} for update
+	</select>
+	
+	<sql id="userListCon">
+		<where>
+			<if test="key != null and key != ''">
+				(display_name like concat('%', #{key}, '%')
+				or 'name' like concat('%', #{key}, '%')
+				or email_address like concat('%', #{key}, '%'))
+			</if>
+			<if test="userType != null and userType != '' and userType != '-1'  ">
+				and user_type=#{userType}
+			</if>
+		</where>
+	</sql>
+
+    <select id="getUserListByCon" resultMap="rm">
+	  	select * from tbl_user
+		<include refid="userListCon"/>
+	</select>
+
+	<select id="getUserListCount" resultType="java.lang.Integer">
+		select count(1) from tbl_user
+		<include refid="userListCon"/>
+	</select>
+
+	<update id="updateUserTypeByIds">
+		update tbl_user set update_time = now(), user_type=#{userType}
+		where id in
+		<foreach collection="ids" open="(" close=")" separator="," item="id">
+			#{id}
+		</foreach>
+	</update>
+
+
+</mapper>

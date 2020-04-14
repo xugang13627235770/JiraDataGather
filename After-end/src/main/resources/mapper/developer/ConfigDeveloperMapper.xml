@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.citms.modules.developer.dao.ConfigDeveloperMapper">
+
+	<resultMap id="configDeveloperRm" type="com.citms.modules.developer.entity.ConfigDeveloperEntity">
+		<result property="totalBaseScore" jdbcType="DECIMAL" column="total_base_score" />
+		<result property="storyBaseScore" jdbcType="DECIMAL" column="story_base_score" />
+		<result property="closeStory" jdbcType="DECIMAL" column="close_story" />
+		<result property="testDelayRatio" jdbcType="DECIMAL" column="test_delay_ratio" />
+		<result property="testBackRatio" jdbcType="DECIMAL" column="test_back_ratio" />
+		<result property="issueReturnRatio" jdbcType="DECIMAL" column="issue_return_ratio" />
+		<result property="noredIssueRatio" jdbcType="DECIMAL" column="nored_issue_ratio" />
+		<result property="redIssueRatio" jdbcType="DECIMAL" column="red_issue_ratio" />
+		<result property="validIssueRatio" jdbcType="DECIMAL" column="valid_issue_ratio" />
+		<result property="issueCloseValue" jdbcType="DECIMAL" column="issue_close_value" />
+		<result property="nocloseIssueRatio" jdbcType="DECIMAL" column="noclose_issue_ratio" />
+		<result property="onlineIssueRatio" jdbcType="DECIMAL" column="online_issue_ratio" />
+		<result property="densityJava" jdbcType="DECIMAL" column="density_java" />
+		<result property="densityFront" jdbcType="DECIMAL" column="density_front" />
+		<result property="densityBigdata" jdbcType="DECIMAL" column="density_bigdata" />
+		<result property="densityDefault" jdbcType="DECIMAL" column="density_default" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+        	total_base_score,
+        	story_base_score,
+        	close_story,
+        	test_delay_ratio,
+        	test_back_ratio,
+        	issue_return_ratio,
+        	nored_issue_ratio,
+        	red_issue_ratio,
+        	valid_issue_ratio,
+        	issue_close_value,
+        	noclose_issue_ratio,
+        	online_issue_ratio,
+        	density_java,
+        	density_front,
+        	density_bigdata,
+        	density_default
+	</sql>
+
+	<sql id="developerRecordList">
+		from tbl_user t1
+		<!--关闭故事点数-->
+		LEFT JOIN (SELECT assignee_id, sum(customfield10106) as closeStoryNum
+		from tbl_issue t1 where customfield10106 is not null and `status`=5
+		<if test="ids !=null and ids.size>0">
+			and id in (select issue_id from tbl_issue_sprint where sprint_id in
+			<foreach collection="ids" open="(" close=")" separator="," item="id">
+				#{id}
+			</foreach>)
+		</if>
+		group by assignee_id) t2 on t1.id=t2.assignee_id
+		<!--提测延期天数=sum(实际提测日期-预计提测日期)-->
+		LEFT JOIN (select assignee_id, sum(datediff(tested_date,customfield10204)) as testDelayDays from tbl_issue
+		where customfield10204 &lt; tested_date
+		<if test="ids !=null and ids.size>0">
+			and id in (select issue_id from tbl_issue_sprint where sprint_id in
+			<foreach collection="ids" open="(" close=")" separator="," item="id">
+				#{id}
+			</foreach>)
+		</if>
+		group by assignee_id) t3 on t1.id=t3.assignee_id
+		<!--提测打回次数=变更日志表中的重新打开次数（迭代内故事）-->
+		LEFT JOIN(select t2.assignee_id,count(t2.assignee_id) as testBackTimes from tbl_changelog t1 INNER JOIN tbl_issue t2 on t1.issue_id=t2.id
+		where t1.change_type='status' and t1.change_status=1
+		<if test="ids !=null and ids.size>0">
+			and t2.id in (select issue_id from tbl_issue_sprint where sprint_id in
+			<foreach collection="ids" open="(" close=")" separator="," item="id">
+				#{id}
+			</foreach>)
+		</if>
+		group by t2.assignee_id) t4 on t1.id=t4.assignee_id
+		<!--缺陷回归次数=迭代内缺陷重新打开次数-->
+		LEFT JOIN(select t2.assignee_id,count(t2.assignee_id) as issueReturnTimes from tbl_changelog t1 INNER JOIN tbl_issue t2 on t1.issue_id=t2.id
+		where t1.change_type='status' and t1.change_status=1 and t2.issuetype=2
+		<if test="ids !=null and ids.size>0">
+			and t2.id in (select issue_id from tbl_issue_sprint where sprint_id in
+			<foreach collection="ids" open="(" close=")" separator="," item="id">
+				#{id}
+			</foreach>)
+		</if>
+		group by t2.assignee_id) t5 on t1.id=t5.assignee_id
+		<!--红色缺陷遗留，致命或者严重-->
+		LEFT JOIN(select assignee_id, count(assignee_id) as redIssue from tbl_issue where issuetype=2 and `status`!=5 and priority in(4,5)
+		<if test="ids !=null and ids.size>0">
+			and id in (select issue_id from tbl_issue_sprint where sprint_id in
+			<foreach collection="ids" open="(" close=")" separator="," item="id">
+				#{id}
+			</foreach>)
+		</if>
+		group by assignee_id) t6 on t1.id=t6.assignee_id
+		<!--非红色缺陷遗留，一般-->
+		LEFT JOIN(select assignee_id, count(assignee_id) as noredIssue from tbl_issue where issuetype=2 and `status`!=5 and priority in(1,2,3)
+		<if test="ids !=null and ids.size>0">
+			and id in (select issue_id from tbl_issue_sprint where sprint_id in
+			<foreach collection="ids" open="(" close=")" separator="," item="id">
+				#{id}
+			</foreach>)
+		</if>
+		group by assignee_id) t7 on t1.id=t7.assignee_id
+		<!--有效缺陷数量=迭代内解决结果为“已解决”和“未解决”状态的总缺陷数-->
+		LEFT JOIN(select assignee_id, count(assignee_id) as validIssueNum from tbl_issue where issuetype=2 and resolution in (3,4)
+		<if test="ids !=null and ids.size>0">
+			and id in (select issue_id from tbl_issue_sprint where sprint_id in
+			<foreach collection="ids" open="(" close=")" separator="," item="id">
+				#{id}
+			</foreach>)
+		</if>
+		group by assignee_id) t8 on t1.id=t8.assignee_id
+		<!--缺陷关闭率=已关闭缺陷/总的缺陷-->
+		LEFT JOIN(select t1.assignee_id, (case when t2.num =0 then 0 else (t1.num/t2.num) end) as issueCloseRate
+		from (select assignee_id, count(assignee_id) as num from tbl_issue where issuetype=2 and `status`=5
+            <if test="ids !=null and ids.size>0">
+                and id in (select issue_id from tbl_issue_sprint where sprint_id in
+                <foreach collection="ids" open="(" close=")" separator="," item="id">
+                    #{id}
+                </foreach>)
+            </if>
+            group by assignee_id) t1
+		inner join (select assignee_id, count(assignee_id) as num from tbl_issue where issuetype=2
+		<if test="ids !=null and ids.size>0">
+			and id in (select issue_id from tbl_issue_sprint where sprint_id in
+			<foreach collection="ids" open="(" close=")" separator="," item="id">
+				#{id}
+			</foreach>)
+		</if>
+		group by assignee_id) t2
+		on t1.assignee_id=t2.assignee_id) t9 on t1.id=t9.assignee_id
+		<!--线上反馈缺陷-->
+		LEFT JOIN(select assignee_id, count(assignee_id) as onlineIssue from tbl_issue where customfield10203=4 and issuetype=2
+		<if test="ids !=null and ids.size>0">
+			and id in (select issue_id from tbl_issue_sprint where sprint_id in
+			<foreach collection="ids" open="(" close=")" separator="," item="id">
+				#{id}
+			</foreach>)
+		</if>
+		group by assignee_id) t10 on t1.id=t10.assignee_id
+		where t1.user_type in (4,5,6)
+        AND EXISTS (
+            SELECT t13.assignee_id
+            FROM(select t11.* from tbl_issue t11
+            INNER JOIN tbl_issue_sprint t12 ON t11.id = t12.issue_id AND t12.sprint_id IN
+                <foreach collection="ids" open="(" close=")" separator="," item="id">
+                    #{id}
+                </foreach>) t13
+            WHERE t1.id = t13.assignee_id
+            )
+	</sql>
+
+	<!--开发人员统计记录-->
+	<select id="getDeveloperRecordPage"
+			resultType="com.citms.modules.developer.vo.DeveloperRecordVO" parameterType="java.util.List">
+		select t1.id as userId, t1.user_type as userType, t1.display_name as developerName,round(IFNULL(t2.closeStoryNum, 0),2) as closeStoryNum
+		, IFNULL(t3.testDelayDays, 0) testDelayDays, IFNULL(t4.testBackTimes, 0) testBackTimes, IFNULL(t5.issueReturnTimes, 0) issueReturnTimes
+		,IFNULL(t6.redIssue, 0) redIssue, IFNULL(t7.noredIssue, 0) noredIssue,IFNULL(t8.validIssueNum, 0) validIssueNum
+		,round(IFNULL(t9.issueCloseRate, 0),4) issueCloseRate,IFNULL(t10.onlineIssue, 0) onlineIssue
+		<include refid="developerRecordList"/>
+	</select>
+
+	<select id="getDeveloperRecordList"
+			resultType="com.citms.modules.developer.vo.DeveloperRecordVO" parameterType="java.util.List">
+		select t1.id as userId, t1.user_type as userType, t1.display_name as developerName,round(IFNULL(t2.closeStoryNum, 0),2) as closeStoryNum
+		, IFNULL(t3.testDelayDays, 0) testDelayDays, IFNULL(t4.testBackTimes, 0) testBackTimes, IFNULL(t5.issueReturnTimes, 0) issueReturnTimes
+		,IFNULL(t6.redIssue, 0) redIssue, IFNULL(t7.noredIssue, 0) noredIssue,IFNULL(t8.validIssueNum, 0) validIssueNum
+		,round(IFNULL(t9.issueCloseRate, 0),4) issueCloseRate,IFNULL(t10.onlineIssue, 0) onlineIssue
+		<include refid="developerRecordList"/>
+	</select>
+
+	<select id="getDeveloperRecordCount" resultType="java.lang.Integer" parameterType="java.util.List">
+		select count(1)
+		<include refid="developerRecordList"/>
+	</select>
+
+
+
+</mapper>

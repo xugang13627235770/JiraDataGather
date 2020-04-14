@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.citms.modules.jira.dao.ChangeLogMapper">
+
+	<resultMap id="changeLogRm" type="com.citms.modules.jira.entity.ChangeLogEntity">
+		<result property="pkid" jdbcType="BIGINT" column="pkid" />
+		<result property="id" jdbcType="BIGINT" column="id" />
+		<result property="changeType" jdbcType="VARCHAR" column="change_type" />
+		<result property="originalValue" jdbcType="VARCHAR" column="original_value" />
+		<result property="changeValue" jdbcType="VARCHAR" column="change_value" />
+		<result property="operatorId" jdbcType="BIGINT" column="operator_id" />
+		<result property="operatorDate" jdbcType="TIMESTAMP" column="operator_date" />
+		<result property="issueId" jdbcType="BIGINT" column="issue_id" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+        	id,
+        	change_type,
+        	original_value,
+        	change_value,
+        	operator_id,
+        	operator_date,
+        	issue_id
+	</sql>
+
+
+	<sql id="where">
+		<where>
+		1=1
+			<if test="id != null">
+				AND id = #{id}
+			</if>
+			<if test="changeType != null">
+				AND change_type = #{changeType}
+			</if>
+			<if test="originalValue != null">
+				AND original_value = #{originalValue}
+			</if>
+			<if test="changeValue != null">
+				AND change_value = #{changeValue}
+			</if>
+			<if test="operatorId != null">
+				AND operator_id = #{operatorId}
+			</if>
+			<if test="operatorDate != null">
+				AND operator_date = #{operatorDate}
+			</if>
+			<if test="issueId != null">
+				AND issue_id = #{issueId}
+			</if>
+		</where>
+	</sql>
+
+	<select id="queryChangeLogEntityById" parameterType="java.lang.Long" resultMap="changeLogRm">
+		select <include refid="Base_Column_List"/> from tbl_changelog
+		where id= #{value}
+		for update
+
+	</select>
+
+
+</mapper>

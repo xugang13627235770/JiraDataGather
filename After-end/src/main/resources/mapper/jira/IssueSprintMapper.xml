@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.citms.modules.jira.dao.IssueSprintMapper">
+
+	<resultMap id="issueSprintRm" type="com.citms.modules.jira.entity.IssueSprintEntity">
+		<result property="pkid" jdbcType="BIGINT" column="pkid" />
+		<result property="issueId" jdbcType="BIGINT" column="issue_id" />
+		<result property="sprintId" jdbcType="BIGINT" column="sprint_id" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+			pkid,
+        	issue_id,
+        	sprint_id
+	</sql>
+
+	<sql id="where">
+		<where>
+		1=1
+			<if test="issueId != null">
+				AND issue_id = #{issueId}
+			</if>
+			<if test="sprintId != null">
+				AND sprint_id = #{sprintId}
+			</if>
+		</where>
+	</sql>
+
+	<select id="queryIssueSprintById" resultMap="issueSprintRm">
+		select <include refid="Base_Column_List"/>
+		from tbl_issue_sprint
+		where issue_id = #{issueId} and sprint_id = #{sprintId}
+		for update
+	</select>
+
+	<delete id="deleteByIssueId" parameterType="java.lang.Long">
+		delete from tbl_issue_sprint where issue_id = #{issueId}
+	</delete>
+
+</mapper>

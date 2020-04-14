@@ -1,0 +1,93 @@
+.container{
+  height: 100%;
+  width: 100%;
+  padding: 12px;
+}
+.search-box{
+  width: 100%;
+  padding: 15px;
+  /deep/ .c-btn{
+    padding: 6px 20px;
+    margin-right: 10px;
+  }
+  label{
+    color: #c4c4c4;
+    margin-right: 8px;
+    font-size: 14px;
+  }
+}
+.btn-container{
+  margin: 15px 0 ;
+  .rf{
+    margin-left: 15px;
+  }
+}
+.main-box{
+  height: calc(100% - 150px);
+  overflow-y: auto;
+  .main-content{
+    float: left;
+    width: calc(25% - 10px);
+    margin: 0 5px 10px;
+    /deep/ .c-btn{
+      font-size: 14px;
+    }
+    .panel-head{
+      padding: 15px 20px;
+      background-color: #303b63;
+      position: relative;
+      font-size: 4px;
+      color: #fff;
+    }
+    .panel-content{
+      background-color: #232d50;
+      height: calc(100% - 60px);
+      padding: 10px 20px;
+      overflow: hidden;
+      ul{
+        padding: 10px;
+        li{
+          margin-bottom: 8px;
+          overflow: hidden;
+          label{
+            width: 90px;
+            text-align: right;
+            color: #C3c3c3;
+          }
+          span{
+            width: calc(10% - 95px);
+            text-align: left;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+        }
+      }
+      .c-btn{
+        margin-left: 10px;
+        .c-fa{
+          margin-right: 5px;
+        }
+      }
+      /deep/ .c-btn-linear{
+        &>span{
+          padding: 0 5px;
+          &>span{
+            font-size: 12px;
+          }
+        }
+      }
+    }
+  }
+  
+}
+// 查看数据库
+.dataBase-box{
+  .search-box{
+    width: 100%;
+    padding: 20px 0;
+  }
+}
+/deep/ .c-select-group .c-dropdown-toggle>.single-item>div{
+  height:18px;
+}

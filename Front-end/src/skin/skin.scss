@@ -1,0 +1,220 @@
+body.darkblue__ {
+  color: #fff;
+  .spotting .c-btn-group {
+    max-height: 180px;
+    overflow-y: auto;
+  }
+  .c-form-control {
+    border-color: #1875c0;
+    color: #5bceff;
+    background-color: transparent;
+  }
+  .c-select-multiple .c-selected-tag {
+    color: #fff;
+  }
+  .c-select-group .c-dropdown-toggle {
+    border-color: #1875c0;
+    color: #1875c0;
+    background-color: transparent;
+  }
+  .c-dropdown-menu {
+    background-color: #303b63;
+    color: #56ceff;
+    box-shadow: 7px 7px 7px #0c0823;
+  }
+  .c-dropdown-menu li > a {
+    color: #56ceff;
+  }
+  //头部导航
+  .top-menu {
+    .c-nav-item {
+      font-size: 15px;
+    }
+    .nav-top .c-subnav__title,
+    .nav-top .c-nav-item {
+      color: #fff;
+    }
+
+    .c-nav-horizontal .c-subnav .c-nav-item.is-active {
+      color: #e8bd5e;
+    }
+    .c-nav-horizontal .c-subnav .c-nav-item:hover {
+      bottom: 0;
+    }
+  }
+
+  //识别规则配置
+  .recogConfRule {
+    .item-box {
+      background-color: #2a3256;
+    }
+    .content-group .c-fa-clock-o {
+      color: #1dabe9;
+    }
+    .item-group {
+      border-color: #40496a;
+    }
+
+    .c-nav-tabs > li > a {
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .c-nav-horizontal .c-subnav .c-nav-item:hover {
+      bottom: 0;
+      background-color: #0c3b7c;
+    }
+
+    .item-box .btn-box .c-btn {
+      color: #fff;
+      border: 0;
+    }
+
+    .item-box .btn-box .c-btn:hover {
+      opacity: 0.8;
+    }
+
+    .c-timepicker input {
+      border-color: #1875c0;
+      color: #5bceff;
+      background-color: transparent;
+    }
+  }
+
+  //场景色
+  //主色
+  .bg-scene {
+    background-color: #1dabe8;
+  }
+  .color-scene {
+    color: #1dabe8;
+  }
+  //辅助色
+  .bg-scene-auxiliary {
+    background-color: #e8bd5e;
+  }
+  .color-scene-auxiliary {
+    color: #e8bd5e;
+  }
+
+  //背景色
+  //导航
+  .bg-nav {
+    background-color: #022562;
+  }
+  //左侧
+  .bg-left-side {
+    background-color: #141b38;
+  }
+  //主背景
+  .bg-main {
+    background-color: #030124;
+  }
+  //卡片色
+  .bg-card-box-1 {
+    background-color: #191e3c;
+  }
+
+  //文本色
+  .color-f1 {
+    color: #5bc3ff;
+  }
+  .color-f2 {
+    color: #5782b2;
+  }
+  .color-f3 {
+    color: #313131;
+  }
+  .color-f4 {
+    color: #fff;
+  }
+
+  //字体
+  //一级标题
+  .font-tit1 {
+    font-family: "Microsoft Yahei";
+    font-size: 18px;
+  }
+  //导航
+  .font-nav {
+    font-family: "Microsoft Yahei";
+    font-size: 15px;
+  }
+  //正文
+  .font-mcontent {
+    font-family: "Microsoft Yahei";
+    font-size: 14px;
+  }
+  //数字
+  .font-num {
+    font-family: "Microsoft Yahei";
+    font-size: 14px;
+  }
+  //提示
+  .font-hint {
+    font-family: "Microsoft Yahei";
+    font-size: 12px;
+  }
+
+  // 文本框
+  .c-page-item,
+  .c-form-control {
+    margin: 0;
+    min-width: inherit;
+    width: 28px;
+  }
+
+  //车牌
+  .plateCtrls {
+    height: 32px;
+    display: inline-block;
+  }
+
+  // 分页
+  .c-page-item-jump-next,
+  .c-page-item-jump-prev,
+  .c-page-next,
+  .c-page-prev {
+    height: 28px;
+    line-height: 28px;
+    width: 28px;
+  }
+  .c-page-next i,
+  .c-page-prev i {
+    line-height: 28px;
+  }
+  .c-select-group .c-dropdown-toggle > .single-item > div > div {
+    line-height: 18px;
+  }
+  .c-page-item {
+    height: 28px;
+    line-height: 28px;
+    width: 28px;
+  }
+
+  .c-timepicker .c-form-control {
+    background: transparent;
+  }
+  // 查看大图
+  .c-modal-content {
+    background: #141b38;
+  }
+  .imgTitle {
+    height: 50px;
+    line-height: 50px;
+    font-size: 14px;
+    text-align: center;
+    background: #232d50;
+  }
+  .c-modal-content .close {
+    float: right;
+    margin-right: 20px;
+    color: #fff;
+  }
+  .c-modal-dialog {
+    border: 0px none;
+  }
+  .bigImage .c-modal-body {
+    padding: 0;
+  }
+}

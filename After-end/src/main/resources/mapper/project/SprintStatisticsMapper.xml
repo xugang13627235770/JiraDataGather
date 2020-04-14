@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.citms.modules.project.dao.SprintStatisticsMapper">
+
+	<resultMap id="sprintStatisticsRm" type="com.citms.modules.project.entity.SprintStatisticsEntity">
+		<result property="sprintId" jdbcType="BIGINT" column="sprint_id" />
+		<result property="sprintTargetRate" jdbcType="VARCHAR" column="sprint_target_rate" />
+		<result property="sprintTargetRateScore" jdbcType="VARCHAR" column="sprint_target_rate_score" />
+		<result property="avgStoryPoint" jdbcType="VARCHAR" column="avg_story_point" />
+		<result property="avgStoryPointScore" jdbcType="VARCHAR" column="avg_story_point_score" />
+		<result property="avgStoryTime" jdbcType="VARCHAR" column="avg_story_time" />
+		<result property="avgStoryTimeScore" jdbcType="VARCHAR" column="avg_story_time_score" />
+		<result property="avgStoryDelay" jdbcType="VARCHAR" column="avg_story_delay" />
+		<result property="avgStoryDelayScore" jdbcType="VARCHAR" column="avg_story_delay_score" />
+		<result property="reopenStory" jdbcType="VARCHAR" column="reopen_story" />
+		<result property="reopenStoryScore" jdbcType="VARCHAR" column="reopen_story_score" />
+		<result property="remainStory" jdbcType="VARCHAR" column="remain_story" />
+		<result property="remainStoryScore" jdbcType="VARCHAR" column="remain_story_score" />
+		<result property="overdueStoryPoint" jdbcType="VARCHAR" column="overdue_story_point" />
+		<result property="overdueStoryPointScore" jdbcType="VARCHAR" column="overdue_story_point_score" />
+		<result property="defectCloseRate" jdbcType="VARCHAR" column="defect_close_rate" />
+		<result property="defectCloseRateScore" jdbcType="VARCHAR" column="defect_close_rate_score" />
+		<result property="defectDensity" jdbcType="VARCHAR" column="defect_density" />
+		<result property="defectDensityScore" jdbcType="VARCHAR" column="defect_density_score" />
+		<result property="remainDefectRate" jdbcType="VARCHAR" column="remain_defect_rate" />
+		<result property="remainDefectRateScore" jdbcType="VARCHAR" column="remain_defect_rate_score" />
+		<result property="onlineDefect" jdbcType="VARCHAR" column="online_defect" />
+		<result property="onlineDefectScore" jdbcType="VARCHAR" column="online_defect_score" />
+		<result property="onlineRepairTime" jdbcType="VARCHAR" column="online_repair_time" />
+		<result property="onlineRepairTimeScore" jdbcType="VARCHAR" column="online_repair_time_score" />
+		<result property="addStory" jdbcType="VARCHAR" column="add_story" />
+		<result property="addStoryScore" jdbcType="VARCHAR" column="add_story_score" />
+		<result property="createdTime" jdbcType="DATE" column="created_time" />
+		<result property="sprintNewStory" jdbcType="VARCHAR" column="sprint_new_story" />
+		<result property="sprintNewStoryFinish" jdbcType="VARCHAR" column="sprint_new_story_finish" />
+		<result property="sprintOldStory" jdbcType="VARCHAR" column="sprint_old_story" />
+		<result property="sprintOldStoryFinish" jdbcType="VARCHAR" column="sprint_old_story_finish" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+        	sprint_id,
+        	sprint_target_rate,
+        	sprint_target_rate_score,
+        	avg_story_point,
+        	avg_story_point_score,
+        	avg_story_time,
+        	avg_story_time_score,
+        	avg_story_delay,
+        	avg_story_delay_score,
+        	reopen_story,
+        	reopen_story_score,
+        	remain_story,
+        	remain_story_score,
+        	overdue_story_point,
+        	overdue_story_point_score,
+        	defect_close_rate,
+        	defect_close_rate_score,
+        	defect_density,
+        	defect_density_score,
+        	remain_defect_rate,
+        	remain_defect_rate_score,
+        	online_defect,
+        	online_defect_score,
+        	online_repair_time,
+        	online_repair_time_score,
+        	add_story,
+        	add_story_score,
+        	created_time,
+        	sprint_new_story,
+        	sprint_new_story_finish,
+        	sprint_old_story,
+        	sprint_old_story_finish
+	</sql>
+
+	<select id="querySprintStatisticsById" resultMap="sprintStatisticsRm">
+		select <include refid="Base_Column_List"/> from tbl_sprint_statistics
+		where sprint_id=#{value}
+		for update
+	</select>
+
+
+</mapper>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.citms.modules.jira.dao.StoryPointRecordMapper">
+
+	<resultMap id="storyPointRecordRm" type="com.citms.modules.jira.entity.StoryPointRecord">
+		<result property="sprintId" jdbcType="BIGINT" column="sprint_id" />
+		<result property="sprintDate" jdbcType="DATE" column="sprint_date" />
+		<result property="storyPoint" jdbcType="DECIMAL" column="story_point" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+        	sprint_id,
+        	sprint_date,
+        	story_point
+	</sql>
+
+
+	<select id="getCurrentStoryPointRecord"
+			resultType="com.citms.modules.jira.entity.StoryPointRecord">
+		select t2.sprint_id sprintId,sum(t1.customfield10106) storyPoint, now() sprintDate from tbl_issue t1
+		inner join tbl_issue_sprint t2 on t1.id=t2.issue_id
+		where t1.customfield10106 is not null and `status` != 5
+		group by t2.sprint_id
+	</select>
+
+	<insert id="batchSaveStoryPointRecord" parameterType="java.util.List">
+		INSERT INTO tbl_story_point_record (sprint_id,sprint_date,story_point)
+		VALUES
+		<foreach collection="storyPointRecordList" item="item" separator=",">
+			(#{item.sprintId},#{item.sprintDate},#{item.storyPoint})
+		</foreach>
+
+	</insert>
+
+
+</mapper>

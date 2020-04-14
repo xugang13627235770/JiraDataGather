@@ -1,0 +1,648 @@
+/*
+    暂时性重构组件样式，等待任明重构组件，即可删除该文件
+*/
+
+body {
+  // color: #fff;
+  .c-form-horizontal .date.c-form-group {
+    display: flex;
+    align-items: center;
+  }
+    // 已通过
+    .color0{
+        background: #4b723d
+    }
+    // 未确认
+    .color1{
+        background: #72413c
+    }
+    // 待录入
+    .color2{
+        background: #723f5e
+    }
+    // 已驳回
+    .color3{
+        background: #7b4930
+    }
+    // 待审核
+    .color5{ 
+        background:#876e46;  
+    }
+    // 已通过
+    .color6{
+        background: #703f5d
+    }
+     // 上传中
+     .color7{
+        background: #496595
+    }
+    // 已上传
+    .color8{
+        background: #4a828f
+    }
+    // 上传失败
+    .color9{
+        background: #732b1c
+    }
+    // 已废弃
+    .color10{
+        background: #746e6e
+    }
+    //未知
+    .color11{
+        background: #5b595c
+    }
+  .c-select-dropdown-menu {
+    background-color: #303b63;
+    color: #56ceff;
+
+    .c-select-search {
+      background-color: #303b63;
+      color: #56ceff;
+    }
+  }
+  .c-data-table-fixed-columns {
+    z-index: 100;
+  }
+  .c-dropdown-menu li > a {
+    color: #fff;
+  }
+  .c-dropdown-menu li > a:hover {
+    color: #fff;
+  }
+  .table-drap {
+    background-color: #232d50;
+    color: #fff;
+
+    .c-table-bordered > thead > tr > td,
+    .c-table-bordered > thead > tr > th {
+      background-color: #1a1e3c;
+      position: relative;
+    }
+    tbody {
+      background-color: #303b63;
+    }
+    .c-btn-primary {
+      background: -webkit-gradient(
+        linear,
+        left top,
+        left bottom,
+        from(rgba(38, 87, 227, 0.3)),
+        to(rgba(4, 163, 176, 0.3))
+      );
+      background: linear-gradient(
+        rgba(38, 87, 227, 0.3),
+        rgba(4, 163, 176, 0.3)
+      );
+      border: 1px solid;
+      -o-border-image: linear-gradient(#04a3b0, #2657e3) 1 round;
+      border-image: -webkit-gradient(
+          linear,
+          left top,
+          left bottom,
+          from(#04a3b0),
+          to(#2657e3)
+        )
+        1 round;
+      border-image: linear-gradient(#04a3b0, #2657e3) 1 round;
+      height: 30px;
+      line-height: 30px;
+      padding-top: 0px;
+    }
+
+    .c-form-control {
+      border-color: rgba(24, 117, 192, 0.5);
+      color: #5bceff;
+      background-color: transparent;
+      height: 30px;
+      line-height: 30px;
+    }
+
+    
+  }
+
+  .plateCtrls .c-plate-bg{
+    background: transparent;
+    border-color: rgba(24, 117, 192, 0.5);
+  }
+}
+
+// #sysmanager-app {
+//     .c-modal {
+//         top: 51px !important;
+//     }
+// }
+
+#app {
+  .c-alert{background: #475279}
+  .block-bg {
+    background-color: #141b38;
+  }
+  .block-dart-bg {
+    background-color: #030124;
+  }
+  .block-shadow-bg {
+    background-color: rgba(35, 45, 80, 0.4);
+  }
+  .bordered-r {
+    border-right: 1px solid #213663;
+  }
+  .bordered-t {
+    border-top: 1px solid #213663;
+  }
+  .bordered-b {
+    border-bottom: 1px solid #213663;
+  }
+  .bordered {
+    border: 1px solid #213663;
+  }
+
+  .c-form-control {
+    border-color: rgba(24, 117, 192, 0.5);
+    color: #5bceff;
+    background-color: transparent;
+  }
+  .c-btn-group-vertical{
+    max-height: 156px;
+    overflow-y: scroll;
+  }
+  .c-select-multiple {
+    .c-selected-tag {
+      background-color: #157dc9;
+      color: #fff;
+      line-height: 20px;
+    }
+  }
+  .c-selected-tag {
+    background-color: #157dc9;
+    color: #fff;
+    line-height: 20px;
+  }
+  .c-form-control:hover,
+  .c-select-group .c-dropdown-toggle:hover {
+    border-color: #1dabe8;
+    color: #5bceff;
+  }
+  .c-select-group .c-select-btn:hover {
+    color: #1dabe8 !important;
+  }
+  .c-select-group .c-dropdown-toggle {
+    border-color: rgba(24, 117, 192, 0.5);
+    color: #5bceff;
+    background-color: transparent;
+    text-align: left;
+    height: auto;
+  }
+  .c-select-group .c-dropdown-menu {
+    background-color: #303b63;
+    color: #56ceff;
+    box-shadow: 7px 7px 7px #0c0823;
+    width: 100%;
+  }
+  .c-dropdown-menu li > a {
+    color: #56ceff;
+  }
+
+  //头部导航
+  .top-menu {
+    .nav-top {
+      padding-left: 180px;
+    }
+    .top-menu {
+      position: relative;
+    }
+    .top-menu > .logo {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 1;
+      color: #fff;
+      font-size: 18px;
+      span {
+        padding-left: 6px;
+      }
+    }
+    .c-nav-horizontal .c-subnav > .c-nav {
+      z-index: 10000;
+      top: 52px;
+      border: 1px solid #152b56;
+    }
+    .c-nav-item {
+      font-size: 15px;
+    }
+    background-color: #022562;
+    .c-nav-horizontal .c-subnav > .c-nav,
+    .c-nav-horizontal .c-subnav .c-nav-item {
+      background-color: #022562;
+    }
+    .c-nav-horizontal {
+      background-color: #022562;
+    }
+    .nav-top {
+      border-bottom: 1px solid #152b56;
+    }
+    .nav-top .c-subnav__title,
+    .nav-top .c-nav-item {
+      color: #dbe4f2;
+    }
+    .nav-top > .c-nav-item.is-active,
+    .c-nav-horizontal .c-subnav.is-active {
+      background: linear-gradient(to top, #196294, #022461);
+      border-bottom: 2px solid #1975c0;
+    }
+    .c-nav-horizontal .c-subnav .c-nav-item.is-active {
+      background-color: #041243;
+      color: #e8bd5e;
+    }
+    .c-nav-horizontal .c-subnav .c-nav-item:hover {
+      bottom: 0;
+      background-color: #0c3b7c;
+    }
+    .c-nav-horizontal > .c-nav-item:hover,
+    .c-nav-horizontal > .c-subnav.is-active .c-subnav__title,
+    .c-nav-horizontal > .c-subnav:hover .c-subnav__title {
+      border-bottom: none;
+    }
+    .c-nav-horizontal .c-subnav.is-active > .c-subnav__title {
+      color: #fff;
+    }
+    .c-nav-horizontal .c-nav-item {
+      height: 50px;
+      line-height: 50px;
+    }
+    .c-nav-horizontal .c-subnav .c-subnav__title {
+      height: 50px;
+      line-height: 50px;
+    }
+    .c-nav-horizontal {
+      height: 50px;
+      line-height: 50px;
+    }
+    .c-nav-horizontal .c-subnav {
+      height: 50px;
+    }
+    .c-subnav__title {
+      font-size: 15px;
+    }
+  }
+  // 表单
+  .c-control-label {
+    color: #fff;
+    font-size: 14px;
+    text-align: right;
+  }
+  .c-select-group .c-select-search {
+    background-color: #303b63;
+    height: 40px;
+  }
+  // 车牌
+  .plateCtrls {
+    background-color: transparent !important;
+    border-color: rgba(24, 117, 192, 0.5);
+    color: #5bceff;
+    background-color: transparent;
+  }
+  // 批量导入
+  .btn-import .c-btn-success {
+    height: 30px;
+    font-size: 12px;
+    line-height: 30px;
+    background: linear-gradient(rgba(38, 87, 227, 0.3), rgba(4, 163, 176, 0.3));
+    border: 1px solid;
+    border-image: -webkit-linear-gradient(
+        rgba(4, 163, 176, 1),
+        rgba(38, 87, 227, 1)
+      )
+      1 round;
+    border-image: -moz-linear-gradient(
+        rgba(4, 163, 176, 1),
+        rgba(38, 87, 227, 1)
+      )
+      1 round;
+    border-image: linear-gradient(rgba(4, 163, 176, 1), rgba(38, 87, 227, 1)) 1
+      round;
+    &:hover {
+      background: linear-gradient(
+        rgba(38, 87, 227, 0.3),
+        rgba(4, 163, 176, 0.5)
+      );
+    }
+  }
+  // 
+  .c-radio-btn {
+    // height: 32px;
+    // line-height: 32px;
+    &.c-btn-active,
+    .c-btn-active.c-btn-active,
+    .c-btn-active:active,
+    .c-btn-active:focus,
+    .c-btn-active:hover {
+      background: linear-gradient(#04a3b0, #2657e3) !important;
+      border: 1px solid #2657e3;
+      min-width: 30px;
+    }
+    &.c-btn-primary {
+      background: linear-gradient(
+        rgba(38, 87, 227, 0.3),
+        rgba(4, 163, 176, 0.3)
+      ) !important;
+      border: 1px solid #2657e3 !important;
+      min-width: 30px;
+    }
+  }
+  .c-btn-primary {
+    background: linear-gradient(#04a3b0, #2657e3);
+    border: none;
+  }
+
+  .tableTool{
+        .c-data-table-bar {
+            .c-select-btn {
+            line-height: 30px;
+            }
+        }
+    }
+  // 表格
+  .c-data-table-bar {
+    .c-select-btn {
+      min-height: 30px !important;
+      height: 30px;
+      
+    }
+    .c-btn {
+      font-size: 12px;
+      color: #fff;
+      // background: linear-gradient(
+      //   rgba(38, 87, 227, 0.3),
+      //   rgba(4, 163, 176, 0.3)
+      // );
+      // border: 1px solid rgba(38, 87, 227, 1);
+      // border-image: -webkit-linear-gradient(rgba(4, 163, 176, 1), rgba(38, 87, 227, 1)) 1 round;
+      // border-image: -moz-linear-gradient(rgba(4, 163, 176, 1), rgba(38, 87, 227, 1)) 1 round;
+      // border-image: linear-gradient(rgba(4, 163, 176, 1), rgba(38, 87, 227, 1)) 1 round;
+      // &:hover {
+      //   background: linear-gradient(
+      //     rgba(38, 87, 227, 0.3),
+      //     rgba(4, 163, 176, 0.5)
+      //   );
+      // }
+    }
+    // 表格
+    .c-data-table-bar {
+      .c-select-btn {
+        min-height: 30px !important;
+      }
+      .c-btn {
+        height: 30px !important;
+        line-height: 30px !important;
+        font-size: 12px;
+        color: #fff;
+        background: linear-gradient(
+        rgba(38, 87, 227, 0.3),
+        rgba(4, 163, 176, 0.3)
+        );
+        border: 1px solid rgba(38, 87, 227, 1);
+        // border-image: -webkit-linear-gradient(rgba(4, 163, 176, 1), rgba(38, 87, 227, 1)) 1 round;
+        // border-image: -moz-linear-gradient(rgba(4, 163, 176, 1), rgba(38, 87, 227, 1)) 1 round;
+        // border-image: linear-gradient(rgba(4, 163, 176, 1), rgba(38, 87, 227, 1)) 1 round;
+        &:hover {
+          background: linear-gradient(
+            rgba(38, 87, 227, 0.3),
+            rgba(4, 163, 176, 0.5)
+          );
+        }
+      }
+      .tableTool {
+        .c-btn {
+          min-width: 84px;
+          height: 30px !important;
+          line-height: 30px !important;
+          &:hover span,
+          i {
+            color: #fff !important;
+          }
+          &:hover {
+            background: linear-gradient(
+              rgba(4, 163, 176, 0.5),
+              rgba(38, 87, 227, 0.3)
+            );
+          }
+        }
+      }
+      .pull-left {
+        .c-btn {
+          height: 30px !important;
+          line-height: 30px !important;
+          margin-left: 8px;
+        }
+      }
+    }
+  }
+  .c-table-bordered > thead > tr > td,
+  .c-table-bordered > thead > tr > th {
+    background-color: rgba(35, 45, 80, 1) !important;
+    color: #fff;
+  }
+  .c-table > thead > tr > th {
+    border: none !important;
+    padding: 16px 10px;
+    font-size: 15px;
+  }
+  .c-table tbody {
+    background-color: rgba(48,59,99,0.9);
+  }
+  .c-table > tbody > tr > td,
+  .c-table > tbody > tr > th,
+  .c-table > tfoot > tr > td,
+  .c-table > tfoot > tr > th,
+  .c-table > thead > tr > td,
+  .c-table > thead > tr > th {
+    text-align: left;
+    border-top: none;
+    border-right: none;
+    color: #fff;
+    font-size: 14px;
+    position: relative;
+    // padding: 0 6px;
+  }
+  .c-table > tbody > tr > td {
+    vertical-align: middle;
+    text-align: left !important;
+    border-bottom: 1px solid #232d50;
+    height: 44px;
+    padding: 0 10px;
+    // line-height: 44px;
+    a {
+      color: #4addfb !important;
+      margin: 0 3px;
+      &:hover {
+        color: #fad837 !important;
+      }
+    }
+  }
+  .c-table > tbody > tr > td.nopadding {
+    padding-left: 10px;
+  }
+  .c-table-bordered > tbody > tr > td > .render-div,
+  .c-table-bordered > tbody > tr > td > span,
+  .c-table-bordered > tbody > tr > td .c-label {
+    text-align: left;
+    vertical-align: middle;
+    word-wrap: break-word;
+    white-space: normal;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: -webkit-box;
+    /*! autoprefixer: off */
+    -webkit-box-orient: vertical !important;
+    /* autoprefixer: on */
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    line-height: 16px;
+
+  }
+  .c-table-bordered > tbody > tr > td .c-label {
+    white-space: nowrap !important;
+    cursor: default;
+  }
+  // 弹窗
+  .c-modal-dialog {
+    // transform: translate(0px, 0) !important;
+    // height: 100% !important;
+    border-radius: 0;
+    border: none;
+  }
+  .c-modal-content {
+    // height: 100%;
+    border-radius: 0;
+    background-color: rgba(3, 1, 36, 1);
+    color: #fff;
+    .c-modal-content {
+      height: auto;
+    }
+  }
+  .c-modal-header {
+    background-color: #232d50;
+    height: 38px;
+    color: #fff;
+    line-height: 38px;
+    text-align: center;
+    padding: 0 15px;
+    h5 {
+      background-color: #232d50;
+      height: 38px;
+      color: #fff;
+      line-height: 38px;
+      text-align: center;
+    }
+    button {
+      span {
+        height: 38px;
+        color: #fff;
+        line-height: 38px;
+      }
+    }
+  }
+  .c-modal-body {
+    margin: 12px;
+    background-color: rgba(26, 30, 60,1);
+    height: calc(100% - 62px);
+  }
+  .full-modal-route{
+    .c-modal-body{
+      background-color: rgba(26, 30, 60, 0.7);
+    }
+  }
+
+ 
+  .c-select-group .c-dropdown-toggle > .single-item > div > div {
+    line-height: 18px;
+  }
+  .c-page-item {
+    height: 28px;
+    line-height: 28px;
+  }
+  .c-page-item-active {
+    background: linear-gradient(#04a3b0, #2657e3);
+    border: 1px solid #23446e;
+  }
+  .c-table-hover > tbody > tr.selected,
+  .c-table-hover > tbody > tr:hover {
+    color: rgba(12, 8, 35, 0.3) !important;
+  }
+  .c-checkbox-checked .c-checkbox-inner {
+    border-color: #1dabe8;
+    background-color: #1dabe8;
+  }
+  .c-checkbox-inner {
+    border: 1px solid #1dabe8;
+    background-color: #030124;
+  }
+  .c-select-group .c-dropdown-menu {
+    max-height: 461px !important;
+  }
+  .c-tree-active > .c-tree-node__content {
+    color: #fff;
+    padding: 0;
+  }
+  .c-tree-node__content {
+    color: #fff;
+    padding: 0;
+    height: 30px;
+    line-height: 30px;
+  }
+  .position-right-bottom {
+    background-color: #303b63;
+  }
+  .c-select-table > a {
+    height: auto;
+  }
+  .c-cascader {
+    color: #fff !important;
+  }
+  .c-cascader-menu-item-selected,
+  .c-cascader-menu-item-selected:hover {
+    background: #030124 !important;
+    padding-right: 25px;
+  }
+  .c-cascader-menu-item {
+    padding-right: 25px;
+  }
+  .c-cascader-menu {
+    border-right: none;
+  }
+  .c-select-group .c-dropdown-toggle > .single-item > div > div {
+    line-height: 23px !important;
+  }
+  // 筛选条件样式
+  .searchform {
+    .c-checkbox-label {
+      color: white !important;
+    }
+  }
+  //树结构下拉框
+  .c-sel-tree .c-tree-node {
+    min-height: 0px;
+    line-height: 30px;
+  }
+  .c-switch.c-switch-on {
+    background: linear-gradient(#04a3b0, #2657e3);
+  }
+
+  // 时间选择器
+  .c-timepicker > .time-split > span {
+    color: #fff;
+  }
+
+ 
+  // 下拉窗 
+  .c-btn-linear>span>i.c-fa{
+    position: static;
+    top:0;
+    left: 0;
+    transform:none;
+    margin-left: 6px;
+  }
+}

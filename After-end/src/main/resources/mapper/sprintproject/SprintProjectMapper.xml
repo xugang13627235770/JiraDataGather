@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.citms.modules.sprintproject.dao.SprintProjectMapper">
+
+	<resultMap id="sprintProjectRm" type="com.citms.modules.sprintproject.entity.SprintProjectEntity">
+		<result property="sprintId" jdbcType="BIGINT" column="sprint_id" />
+		<result property="projectId" jdbcType="BIGINT" column="project_id" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+        	sprint_id,
+        	project_id
+	</sql>
+
+
+	<sql id="where">
+		<where>
+		1=1 and VALID = 1
+			<if test="sprintId != null">
+				AND sprint_id = #{sprintId}
+			</if>
+			<if test="projectId != null">
+				AND project_id = #{projectId}
+			</if>
+		</where>
+	</sql>
+
+	<select id="querySprintProjectById" resultMap="sprintProjectRm">
+		select <include refid="Base_Column_List"/> from tbl_sprint_project
+	  	where sprint_id=#{sprintId}
+	  	and project_id=#{projectId}
+		and is_deleted=0
+		for update
+	</select>
+
+	<insert id="batchSaveSprintProject" parameterType="java.util.List">
+		INSERT INTO tbl_sprint_project (sprint_id,project_id)
+		VALUES
+		<foreach collection="sprintProjectList" item="item" separator=",">
+			(#{item.sprintId},#{item.projectId})
+		</foreach>
+	</insert>
+
+	<delete id="batchDeleteByProjectIds">
+		delete from tbl_sprint_project
+		where project_id in
+		<foreach collection="projectIdList" open="(" close=")" separator="," item="id">
+			#{id}
+		</foreach>
+	</delete>
+
+	<select id="getAllSprintProjectList" resultMap="sprintProjectRm">
+		select t1.* from tbl_sprint_project t1
+		LEFT JOIN tbl_sprint t2 on t1.sprint_id=t2.id
+		order by t1.project_id, t2.start_date asc
+	</select>
+
+	<select id="getSprintProjectBySprintId" resultMap="sprintProjectRm" parameterType="java.lang.Long">
+		select t1.* from tbl_sprint_project t1
+				LEFT JOIN tbl_sprint t2 on t1.sprint_id=t2.id
+		where t1.project_id=(select project_id from tbl_sprint_project where sprint_id=#{value})
+				order by t2.start_date asc
+	</select>
+
+</mapper>

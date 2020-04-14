@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.citms.modules.project.dao.ProjectMapper">
+
+	<resultMap id="projectRm" type="com.citms.modules.project.entity.ProjectEntity">
+		<result property="pkid" jdbcType="BIGINT" column="pkid" />
+		<result property="id" jdbcType="BIGINT" column="id" />
+		<result property="keyValue" jdbcType="VARCHAR" column="key_value" />
+		<result property="name" jdbcType="VARCHAR" column="name" />
+		<result property="projectPersonId" jdbcType="BIGINT" column="project_person_id" />
+		<result property="projectPerson" jdbcType="VARCHAR" column="project_person" />
+		<result property="projectTypeKey" jdbcType="VARCHAR" column="project_type_key" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+        	id,
+        	key_value,
+        	name,
+        	project_person_id,
+        	project_person,
+        	project_type_key
+	</sql>
+
+
+	<sql id="where">
+		<where>
+		1=1
+			<if test="id != null">
+				AND id = #{id}
+			</if>
+			<if test="keyValue != null">
+				AND key_value = #{keyValue}
+			</if>
+			<if test="name != null">
+				AND name = #{name}
+			</if>
+			<if test="projectPersonId != null">
+				AND project_person_id = #{projectPersonId}
+			</if>
+			<if test="projectPerson != null">
+				AND project_person = #{projectPerson}
+			</if>
+			<if test="projectTypeKey != null">
+				AND project_type_key = #{projectTypeKey}
+			</if>
+		</where>
+	</sql>
+	<select id="queryProjectEntityById" parameterType="java.lang.Long" resultMap="projectRm">
+		select <include refid="Base_Column_List"/> from tbl_project
+		where id= #{value}
+		for update
+	</select>
+
+
+</mapper>
